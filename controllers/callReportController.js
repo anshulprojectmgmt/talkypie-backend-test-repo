@@ -6,8 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 // const VAPI_API_KEY = "2e8fb729-d3a2-4138-b473-37a28497c5d0";
 // const url = 'https://api-talkypies.vercel.app/'
- const url = 'https://talkypie-vapi-backend.vercel.app/';
-// const url = 'https://talkypie-vapi-backend.onrender.com/';
+ // const url = 'https://talkypie-vapi-backend.vercel.app/';
+ const url = 'https://talkypie-vapi-backend.onrender.com/';
 const backend_url = process.env.BACKEND_URL || url;
 
 
@@ -39,8 +39,8 @@ export const createAssistant = async (req, res) => {
         
   // return res.json({assistantId: "80526715-0b84-4217-bbf0-0a85d9a90b88"}); // For testing purposes, returning a static assistantId
   
-   // const websocket_url = 'wss://talkypie-vapi-backend.onrender.com/api/custom-transcriber;
-   const  websocket_url = 'wss://talkypie-vapi-backend.vercel.app/api/custom-transcriber';
+    const websocket_url = 'wss://talkypie-vapi-backend.onrender.com/api/custom-transcriber';
+   // const  websocket_url = 'wss://talkypie-vapi-backend.vercel.app/api/custom-transcriber';
   let transcriptionSetup = {};
 if(customTranscript) {
   transcriptionSetup = {
