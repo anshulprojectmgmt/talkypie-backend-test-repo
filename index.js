@@ -10,24 +10,27 @@ import { attachCustomTranscriberWS } from "./customTranscriberServer.js";
 import http from "http";
 
 const app = express();
-app.use(cors());
-
-
+// app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the TalkyPIES Backend!  ");
+  console.log("Hello from the root rout");
+  res.json({ message: "Welcome to the TalkyPIES Backend!" });
 });
 
 app.use("/vapi", vapiRoutes);
 
-
-
 app.use((err, req, res, next) => {
   console.error("Error occurred:", err);
   res.status(500).json({ error: "Internal Server Error" });
-}); 
+});
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -35,10 +38,8 @@ const server = http.createServer(app);
 // Attach WebSocket handler
 attachCustomTranscriberWS(server);
 
-
 const PORT = process.env.PORT || 5000;
-server.listen(PORT,"0.0.0.0",async () => {
-
+server.listen(PORT, "0.0.0.0", async () => {
   try {
     await mongooseConnection();
     console.log(`🚀 Server listening on port ${PORT} (HTTP + WebSocket)`);
@@ -46,5 +47,4 @@ server.listen(PORT,"0.0.0.0",async () => {
     console.error("❌ Failed to connect to MongoDB:", err);
     process.exit(1); // crash early, Render will restart
   }
-
 });
