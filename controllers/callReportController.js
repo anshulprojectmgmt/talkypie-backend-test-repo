@@ -37,7 +37,7 @@ export const createAssistant = async (req, res) => {
   }
 
   const VAPI_API_KEY = vapiKey || "a40bdb51-da75-4263-bd2f-28cc8f6593ed"; // Default key if none provided
-  const backend_url = "https://guidable-axton-forky.ngrok-free.dev"; // change if needed
+  const backend_url = "https://talkypie-backend-v3.onrender.com"; // change if needed
 
   // ✅ Step 1: Check if assistant already exists
   if (assistantsCache[key]) {
