@@ -7,7 +7,8 @@ dotenv.config();
 // const VAPI_API_KEY = "2e8fb729-d3a2-4138-b473-37a28497c5d0";
 // const url = 'https://api-talkypies.vercel.app/'
 // const url = 'https://talkypie-vapi-backend.vercel.app/';
-const url = "https://guidable-axton-forky.ngrok-free.dev/"; // change if needed
+// const url = "https://guidable-axton-forky.ngrok-free.dev/"; // change if needed
+const url = "https://talkypie-backend-v3.onrender.com"; // change if needed
 const backend_url = process.env.BACKEND_URL || url;
 
 const assistantsCache = {}; // key: childName, value: assistantId
