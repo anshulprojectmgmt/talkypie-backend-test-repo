@@ -64,7 +64,7 @@ export const createAssistant = async (req, res) => {
 
   // ✅ Step 3: Set up transcription provider
   const websocket_url =
-    "wss://guidable-axton-forky.ngrok-free.dev/api/custom-transcriber";
+    "wss://talkypie-backend-v3.onrender.com/api/custom-transcriber";
   let transcriptionSetup = {};
 
   if (customTranscript) {
