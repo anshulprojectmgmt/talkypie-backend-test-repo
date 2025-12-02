@@ -112,7 +112,7 @@ export const createAssistant = async (req, res) => {
         firstMessageMode: "assistant-speaks-first",
         serverMessages: ["end-of-call-report", "function-call"],
         server: {
-          url: `${backend_url}vapi/end-call-report`, // webhook
+          url: `${backend_url}/vapi/end-call-report`, // webhook
         },
       },
       {
