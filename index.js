@@ -13,7 +13,9 @@ const app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: "https://talkypie-frontend-v-3.onrender.com",
+    origin: "https://talkypie-v4.onrender.com",
+    // origin: "https://talkypie-frontend-v-3.onrender.com",
+    // origin: "http://localhost:5173",
     credentials: true,
   })
 );
