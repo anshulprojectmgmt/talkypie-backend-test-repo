@@ -99,7 +99,7 @@ export const createAssistant = async (req, res) => {
         silenceTimeoutSeconds: 30,
         voice: {
           provider: "vapi",
-          voiceId: "Neha",
+          voiceId: "Savannah",
           speed: 0.8,
         },
         transcriber: transcriptionSetup,
@@ -119,7 +119,7 @@ export const createAssistant = async (req, res) => {
         headers: {
           Authorization: `Bearer ${VAPI_API_KEY}`,
         },
-      }
+      },
     );
 
     const assistantId = response.data.id;
@@ -137,7 +137,7 @@ export const createAssistant = async (req, res) => {
   } catch (error) {
     console.error(
       "Error creating assistant:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     res.status(500).json({ error: "Failed to create assistant" });
   }
@@ -240,7 +240,7 @@ export const createLiveKitToken = async (req, res) => {
       identity: participantName,
       // Token to expire after 10 minutes
       ttl: "10m",
-    }
+    },
   );
   at.addGrant({ roomJoin: true, room: roomName });
 
