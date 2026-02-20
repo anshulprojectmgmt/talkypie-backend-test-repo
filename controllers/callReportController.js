@@ -75,6 +75,7 @@ export const createAssistant = async (req, res) => {
   } else {
     transcriptionSetup = {
       provider: "deepgram",
+      model: "nova-2",
       language: "en-IN",
     };
   }
