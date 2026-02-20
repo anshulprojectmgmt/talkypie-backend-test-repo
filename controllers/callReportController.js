@@ -88,7 +88,7 @@ export const createAssistant = async (req, res) => {
         name: `Eva-${childName}`,
         model: {
           provider: "openai",
-          model: "gpt-4o",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
@@ -97,7 +97,7 @@ export const createAssistant = async (req, res) => {
           ],
           temperature: 0.3,
         },
-        silenceTimeoutSeconds: 30,
+        silenceTimeoutSeconds: 10,
         voice: {
           provider: "vapi",
           voiceId: "Savannah",
