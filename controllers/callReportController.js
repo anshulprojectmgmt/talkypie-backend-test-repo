@@ -97,11 +97,11 @@ export const createAssistant = async (req, res) => {
           ],
           temperature: 0.3,
         },
-        silenceTimeoutSeconds: 10,
+        silenceTimeoutSeconds: 30,
         voice: {
           provider: "vapi",
-          voiceId: "Savannah",
-          speed: 0.8,
+          voiceId: "Emma",
+          speed: 1,
         },
         transcriber: transcriptionSetup,
         stopSpeakingPlan: {
