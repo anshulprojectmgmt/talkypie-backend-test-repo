@@ -74,21 +74,24 @@ ${contextPrompt}Make sure to stay friendly and supportive.`;
   return finalPrompt;
 }
 
-function getAssistantIdFromReport(callReport) {
+function getAssistantIdFromReport(payload) {
   return (
-    callReport?.assistantId ||
-    callReport?.call?.assistantId ||
-    callReport?.assistant?.id ||
+    payload?.assistantId ||
+    payload?.message?.assistantId ||
+    payload?.message?.call?.assistantId ||
+    payload?.message?.assistant?.id ||
+    payload?.call?.assistantId ||
+    payload?.assistant?.id ||
     null
   );
 }
-
 function normalizeBaseUrl(url) {
   return String(url || "").replace(/\/+$/, "");
 }
 
 function getRuntimeBackendUrl(req) {
   if (process.env.BACKEND_URL) {
+    console.log(process.env.BACKEND_URL);
     return normalizeBaseUrl(process.env.BACKEND_URL);
   }
 
@@ -146,7 +149,8 @@ export const createAssistant = async (req, res) => {
 
   try {
     await mongooseConnection();
-    const runtimeBackendUrl = getRuntimeBackendUrl(req);
+    const runtimeBackendUrl = process.env.BACKEND_URL;
+    console.log(runtimeBackendUrl);
     const webhookUrl = `${runtimeBackendUrl}/vapi/end-call-report`;
 
     const existingOwnership = await AssistantOwnershipModel.findOne({
@@ -267,14 +271,15 @@ export const createAssistant = async (req, res) => {
 export const storeCallReport = async (req, res) => {
   try {
     console.log("Hi I'm called from the /vapi/end-call-report");
+    console.log("Full webhook payload:", JSON.stringify(req.body, null, 2));
     await mongooseConnection();
 
     if (req.body?.message?.type !== "end-of-call-report") {
       return res.status(400).json({ error: "Invalid message type" });
     }
 
-    const callReport = req.body.message;
-    const assistantId = getAssistantIdFromReport(callReport);
+    const callReport = req.body.message || req.body;
+    const assistantId = getAssistantIdFromReport(req.body);
     console.log("assistat id", assistantId);
     if (!assistantId) {
       return res
