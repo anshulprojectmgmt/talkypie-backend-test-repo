@@ -1,53 +1,71 @@
-// backend/index.js
 import express from "express";
-import axios from "axios";
 import cors from "cors";
+import dotenv from "dotenv";
+import http from "http";
 import { mongooseConnection } from "./config/mongooseConfig.js";
 import vapiRoutes from "./routes/vapiRoutes.js";
-import dotenv from "dotenv";
-dotenv.config();
+import authRoutes from "./routes/authRoutes.js";
 import { attachCustomTranscriberWS } from "./customTranscriberServer.js";
-import http from "http";
+
+dotenv.config();
 
 const app = express();
-// app.use(cors());
+app.set("trust proxy", 1);
+
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const defaultOrigins = [
+  "https://talkypie-v4.onrender.com",
+  "https://talkypie-v4.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
+const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
+
 app.use(
   cors({
-    origin: "https://talkypie-v4.onrender.com",
-    // origin: "https://talkypie-frontend-v-3.onrender.com",
-    // origin: "https://talkypie-frontend-v3.onrender.com",
-    // origin: "http://localhost:5173",
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  console.log("Hello from the root rout");
   res.json({ message: "Welcome to the TalkyPIES Backend!" });
 });
 
+app.use("/auth", authRoutes);
 app.use("/vapi", vapiRoutes);
 
 app.use((err, req, res, next) => {
+  if (err?.message === "Not allowed by CORS") {
+    return res.status(403).json({ error: err.message });
+  }
   console.error("Error occurred:", err);
-  res.status(500).json({ error: "Internal Server Error" });
+  return res.status(500).json({ error: "Internal Server Error" });
 });
 
-// Create HTTP server
 const server = http.createServer(app);
-
-// Attach WebSocket handler
 attachCustomTranscriberWS(server);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, "0.0.0.0", async () => {
   try {
     await mongooseConnection();
-    console.log(`🚀 Server listening on port ${PORT} (HTTP + WebSocket)`);
+    console.log(`Server listening on port ${PORT} (HTTP + WebSocket)`);
   } catch (err) {
-    console.error("❌ Failed to connect to MongoDB:", err);
-    process.exit(1); // crash early, Render will restart
+    console.error("Failed to connect to MongoDB:", err);
+    process.exit(1);
   }
 });
