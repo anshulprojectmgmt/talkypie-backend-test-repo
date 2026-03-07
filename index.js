@@ -22,6 +22,7 @@ const defaultOrigins = [
   "https://talkypie-v4.vercel.app",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "https://talkypie-v5.onrender.com",
 ];
 
 const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
